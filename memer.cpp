@@ -47,6 +47,8 @@ Memer::generateMeme(sf::Image base, sf::String topText, sf::String bottomText, i
         renderTexture.draw(bottom);
     }
 
+    launchWindow(renderTexture, width, height);
+
     return retrieveImage(renderTexture);
 }
 
@@ -61,4 +63,23 @@ sf::Image Memer::retrieveImage(sf::RenderTexture &renderTexture)
 void Memer::saveToFile(const sf::Image& base, string filename)
 {
     base.saveToFile(filename);
+}
+
+void Memer::launchWindow(sf::RenderTexture &renderTexture, int width, int height)
+{
+    sf::RenderWindow window(sf::VideoMode(width, height), "Meme Generator");
+
+    sf::Event event;
+    sf::Sprite afterSprite(renderTexture.getTexture());
+    afterSprite.setTextureRect(sf::IntRect(0, height, width, -height));
+
+    while (window.isOpen())
+    {
+        window.clear();
+        window.draw(afterSprite);
+        window.display();
+
+        if (window.pollEvent(event) and event.type == sf::Event::Closed)
+            window.close();
+    }
 }
